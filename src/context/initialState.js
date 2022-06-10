@@ -1,12 +1,11 @@
-import { fetchUser } from "../utils/fetchLocalData"
+import { fetchCart, fetchUser } from "../utils/fetchLocalData";
 
+const userInfo = fetchUser();
+const cartInfo = fetchCart();
 
-
-const userInfo = fetchUser()
-
-
-export const initialState ={
-    user : userInfo,
-    foodItems :null
-
-}
+export const initialState = {
+  user: userInfo,
+  foodItems: null,
+  cartShow: false,
+  cartItems: cartInfo,
+};
