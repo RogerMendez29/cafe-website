@@ -1,9 +1,9 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Logo from "./Images/logo_files/logo.png";
 import Avatar from "./Images/General/avatar.png";
 import { motion } from "framer-motion";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../firebase.config";
 import { MdShoppingCart, MdLogout, MdAdd } from "react-icons/md";
@@ -20,11 +20,25 @@ export const Header = () => {
 
   const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
 
-  {
-    user ? console.log(user) : console.log("false");
-  }
-
+  const location = useLocation();
   const navigate = useNavigate();
+  const showCart = () => {
+    dispatch({
+      type: actionType.SET_CART_SHOW,
+      cartShow: !cartShow,
+    });
+  };
+
+  useEffect(() => {
+    if (location.hash) {
+      let elem = document.getElementById(location.hash.slice(1));
+
+      elem.scrollIntoView({ behavior: "smooth", block: "center" });
+      console.log(elem);
+    } else {
+      window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
+    }
+  }, [location]);
 
   const login = async () => {
     if (!user) {
@@ -60,7 +74,13 @@ export const Header = () => {
             className=" object-cover rounded-full w-16 h-16"
             alt="logo"
           />
-          <p className=" text-xl font-bold p-2"> Cafe Masaryktown</p>
+          <motion.p
+            whileTap={{ scale: 0.6 }}
+            className=" text-xl font-bold p-2"
+          >
+            {" "}
+            Cafe Masaryktown
+          </motion.p>
         </Link>
         <div className=" flex items-center gap-8">
           <motion.ul
@@ -69,18 +89,28 @@ export const Header = () => {
             exit={{ opacity: 0, x: 200 }}
             className="flex items-center gap-8 "
           >
-            <li className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
-              Home
-            </li>
-            <li className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
-              Menu
-            </li>
-            <li className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
-              About Us
-            </li>
-            <li className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer">
-              Services
-            </li>
+            <Link
+              to="/"
+              className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer"
+            >
+              <motion.div whileTap={{ scale: 0.6 }}>Home</motion.div>
+            </Link>
+            <Link
+              to="/#menu"
+              // onClick={() => {
+              //   const menu = document.querySelector("#menu");
+              //   menu.scrollIntoView({ behavior: "smooth", block: "center" });
+              // }}
+              className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer"
+            >
+              <motion.div whileTap={{ scale: 0.6 }}>Menu</motion.div>
+            </Link>
+            <Link
+              to="/contact"
+              className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer"
+            >
+              <motion.div whileTap={{ scale: 0.6 }}>Contact Us</motion.div>
+            </Link>
           </motion.ul>
           <div
             className="relative flex items-center justify-center "
