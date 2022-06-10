@@ -65,6 +65,7 @@ const CreateContainer = () => {
           imageURL: imageAsset,
           category: category,
           popular: isPopular,
+          qty: 1,
           price: price,
         };
         saveItem(data, category);

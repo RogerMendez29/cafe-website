@@ -18,10 +18,16 @@ export const Header = () => {
     prompt: "select_account",
   });
 
-  const [{ user }, dispatch] = useStateValue();
+  const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
 
   const location = useLocation();
   const navigate = useNavigate();
+  const showCart = () => {
+    dispatch({
+      type: actionType.SET_CART_SHOW,
+      cartShow: !cartShow,
+    });
+  };
 
   useEffect(() => {
     if (location.hash) {
@@ -106,11 +112,18 @@ export const Header = () => {
               <motion.div whileTap={{ scale: 0.6 }}>Contact Us</motion.div>
             </Link>
           </motion.ul>
-          <div className="relative flex items-center justify-center ">
+          <div
+            className="relative flex items-center justify-center "
+            onClick={showCart}
+          >
             <MdShoppingCart className="text-textColor text-2xl  cursor-pointer" />
-            <div className="absolute -top-5 -right-2 w-6 h-6 rounded-full bg-cartBg flex items-center justify-center ">
-              <p className="text-xs text-white font-semibold">2</p>
-            </div>
+            {cartItems && cartItems.length > 0 && (
+              <div className="absolute -top-5 -right-2 w-6 h-6 rounded-full bg-cartBg flex items-center justify-center ">
+                <p className="text-xs text-white font-semibold">
+                  {cartItems.length}
+                </p>
+              </div>
+            )}
           </div>
           <div className="relative ">
             <motion.img
@@ -150,12 +163,18 @@ export const Header = () => {
       </div>
       {/* mobile */}
       <div className=" flex md:hidden w-full h-full justify-between">
-        <div className="relative flex items-center justify-center ">
+        <div
+          className="relative flex items-center justify-center  "
+          onClick={showCart}
+        >
           <MdShoppingCart className="text-textColor text-2xl  cursor-pointer" />
-          <div className="absolute -top-0 -right-3 w-6 h-6 rounded-full bg-cartBg flex items-center justify-center ">
-            <p className="text-xs text-white font-semibold">2</p>
-          </div>
+          {cartItems && cartItems.length > 0 && (
+            <div className="absolute -top-0 -right-3 w-6 h-6 rounded-full bg-cartBg flex items-center justify-center ">
+              <p className="text-xs text-white font-semibold">2</p>
+            </div>
+          )}
         </div>
+
         <Link to="/" className="flex items-center gap-2">
           <motion.img
             whileTap={{ scale: 0.6 }}
