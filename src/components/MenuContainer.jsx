@@ -8,7 +8,7 @@ import { useSelector } from "react-redux";
 const MenuContainer = () => {
   const [filter, setFilter] = useState("Entree");
 
-  const foodItems = useSelector((state) => state.foodItems);
+  const foodItems = useSelector((state) => state.food.foodItems);
 
   return (
     <section className="w-full my-6" id="menu">

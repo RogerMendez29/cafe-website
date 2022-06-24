@@ -19,7 +19,7 @@ import { storage } from "../firebase.config";
 import { getAllFoodItems, saveItem } from "../utils/firebaseFunctions";
 
 import { useDispatch } from "react-redux";
-import { setFoodItems } from "../app/reducers/foodItemsSlice";
+import { setFoodItems } from "../reducers/foodSlice";
 
 const CreateContainer = () => {
   const [name, setName] = useState("");

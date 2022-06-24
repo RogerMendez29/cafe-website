@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import notFound from "./Images/General/NotFound.svg";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCartItems } from "../app/reducers/cartSlice";
+import { setCartItems } from "../reducers/cartSlice";
 
 const RowContainer = ({ flag, data, scrollValue }) => {
   const rowContainer = useRef();

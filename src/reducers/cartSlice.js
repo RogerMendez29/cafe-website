@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchCart } from "../../utils/fetchLocalData";
+import { fetchCart } from "../utils/fetchLocalData";
 
 const cartInfo = fetchCart();
 

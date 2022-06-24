@@ -1,14 +1,14 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchUser } from "../../utils/fetchLocalData";
+import { fetchUser } from "../utils/fetchLocalData";
 
 const userInfo = fetchUser();
 
 export const userSlice = createSlice({
   name: "user",
-  initialState: userInfo,
+  initialState: { userInfo },
   reducers: {
     setUser: (state, action) => {
-      state = action.payload;
+      state.userInfo = action.payload;
     },
   },
 });

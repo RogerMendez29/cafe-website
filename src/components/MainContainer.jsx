@@ -11,8 +11,12 @@ import { useSelector } from "react-redux";
 const MainContainer = () => {
   const [scroll, setScroll] = useState(0);
 
-  const cartShow = useSelector((state) => state.cart.showCart);
-  const foodItems = useSelector((state) => state.foodItems);
+  const { cartShow, foodItems } = useSelector((state) => {
+    return {
+      cartShow: state.cart.showCart,
+      foodItems: state.food.foodItems,
+    };
+  });
 
   useEffect(() => {}, [scroll, cartShow]);
 

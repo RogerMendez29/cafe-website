@@ -9,13 +9,17 @@ import { app } from "../firebase.config";
 import { MdShoppingCart, MdLogout, MdAdd } from "react-icons/md";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setUser } from "../app/reducers/userSlice";
-import { setCartShow } from "../app/reducers/cartSlice";
+import { setUser } from "../reducers/userSlice";
+import { setCartShow } from "../reducers/cartSlice";
 
 export const Header = () => {
-  const user = useSelector((state) => state.user);
-  const cartShow = useSelector((state) => state.cart.showCart);
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const { user, cartShow, cartItems } = useSelector((state) => {
+    return {
+      user: state.user.userInfo,
+      cartShow: state.cart.showCart,
+      cartItems: state.cart.cartItems,
+    };
+  });
   const dispatch = useDispatch();
 
   const [isMenu, setIsMenu] = useState(false);

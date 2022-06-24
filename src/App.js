@@ -8,11 +8,10 @@ import { Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { getAllFoodItems } from "./utils/firebaseFunctions";
 
-import { useSelector, useDispatch } from "react-redux";
-import { setFoodItems } from "./app/reducers/foodItemsSlice";
+import { useDispatch } from "react-redux";
+import { setFoodItems } from "./reducers/foodSlice";
 
 export const App = () => {
-  const foodItems = useSelector((state) => state.foodItems);
   const dispatch = useDispatch();
 
   const fetchData = async () => {

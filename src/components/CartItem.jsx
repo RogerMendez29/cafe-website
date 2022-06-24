@@ -3,7 +3,7 @@ import { BiMinus, BiPlus } from "react-icons/bi";
 import { motion } from "framer-motion";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCartItems } from "../app/reducers/cartSlice";
+import { setCartItems } from "../reducers/cartSlice";
 
 let items = [];
 

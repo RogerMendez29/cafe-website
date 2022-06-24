@@ -7,12 +7,16 @@ import CartItem from "./CartItem";
 import EmptyCart from "./Images/General/emptyCart.svg";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setCartShow, setCartItems } from "../app/reducers/cartSlice";
+import { setCartShow, setCartItems } from "../reducers/cartSlice";
 
 const CartContainer = () => {
-  const user = useSelector((state) => state.user);
-  const cartShow = useSelector((state) => state.cart.showCart);
-  const cartItems = useSelector((state) => state.cart.cartItems);
+  const { user, cartShow, cartItems } = useSelector((state) => {
+    return {
+      user: state.user,
+      cartShow: state.cart.showCart,
+      cartItems: state.cart.cartItems,
+    };
+  });
   const dispatch = useDispatch();
 
   const [flag, setFlag] = useState(1);
