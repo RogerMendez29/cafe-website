@@ -4,40 +4,40 @@ import { BiMinus, BiPlus } from "react-icons/bi";
 import { motion } from "framer-motion";
 import { RiRefreshFill } from "react-icons/ri";
 import CartItem from "./CartItem";
-import { useStateValue } from "../context/StateProvider";
-import { actionType } from "../context/reducer";
 import EmptyCart from "./Images/General/emptyCart.svg";
 
+import { useSelector, useDispatch } from "react-redux";
+import { setCartShow, setCartItems } from "../reducers/cartSlice";
+
 const CartContainer = () => {
-  const [{ cartShow, cartItems, user }, dispatch] = useStateValue();
+  const { user, cartShow, cartItems } = useSelector((state) => {
+    return {
+      user: state.user,
+      cartShow: state.cart.showCart,
+      cartItems: state.cart.cartItems,
+    };
+  });
+  const dispatch = useDispatch();
+
   const [flag, setFlag] = useState(1);
   const [subTot, setSubTot] = useState(0);
   const [tax, setTax] = useState(0);
 
-
   const showCart = () => {
-    dispatch({
-      type: actionType.SET_CART_SHOW,
-      cartShow: !cartShow,
-    });
+    dispatch(setCartShow(!cartShow));
   };
 
   useEffect(() => {
     let totalPrice = cartItems.reduce(function (accumulator, item) {
       return accumulator + item.qty * item.price;
     }, 0);
-   let tax = (totalPrice * 0.07).toFixed(2)
-   setSubTot(totalPrice);
+    let tax = (totalPrice * 0.07).toFixed(2);
+    setSubTot(totalPrice);
     setTax(tax);
-
   }, [subTot, flag]);
 
   const clearCart = () => {
-    dispatch({
-      type: actionType.SET_CART_ITEMS,
-      cartItems: [],
-    });
-
+    dispatch(setCartItems([]));
     localStorage.setItem("cartItems", JSON.stringify([]));
   };
 
@@ -83,7 +83,9 @@ const CartContainer = () => {
 
             <div className="w-full flex items-center justify-between">
               <p className="text-gray-200 text-xl font-semibold">Total</p>
-              <p className="text-gray-200 text-xl font-semibold">{parseFloat(tax) + parseFloat(subTot)}</p>
+              <p className="text-gray-200 text-xl font-semibold">
+                {parseFloat(tax) + parseFloat(subTot)}
+              </p>
             </div>
             {user ? (
               <motion.button

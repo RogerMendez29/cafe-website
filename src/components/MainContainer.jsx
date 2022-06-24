@@ -1,17 +1,24 @@
-import React, { useRef, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import HomeContainer from "./HomeContainer";
 import { motion } from "framer-motion";
 import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 import RowContainer from "./RowContainer";
-import { useStateValue } from "../context/StateProvider";
 import MenuContainer from "./MenuContainer";
 import CartContainer from "./CartContainer";
 
+import { useSelector } from "react-redux";
+
 const MainContainer = () => {
-  const [{ foodItems, cartShow }, dispatch] = useStateValue();
   const [scroll, setScroll] = useState(0);
 
-  useEffect(() =>{},[scroll, cartShow])
+  const { cartShow, foodItems } = useSelector((state) => {
+    return {
+      cartShow: state.cart.showCart,
+      foodItems: state.food.foodItems,
+    };
+  });
+
+  useEffect(() => {}, [scroll, cartShow]);
 
   return (
     <div className="w-full h-auto flex flex-col items-center justify-center">
