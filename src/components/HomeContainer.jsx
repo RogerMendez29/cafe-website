@@ -16,7 +16,7 @@ const HomeContainer = () => {
           </span>
         </p>
         <p className="text-base text-textColor text-center md:text-left lg:w-[80%] ">
-          located One Mile North Of County Line Road In The Beautiful City Of
+          Located One Mile North Of County Line Road In The Beautiful City Of
           Masaryktown In Hernando County, While Driving On US 41 Also Know As
           Broad Street. You Will See A Blinking Yellow Light As You Come Through
           This Intersection You Will See The Restaurant On The East side of US
@@ -35,9 +35,7 @@ const HomeContainer = () => {
         />
         {/* m-5 w-full h-full lg:ml-[10rem] lg:mr-[5rem]   absolute top-0 left-0 flex items-center justify-center lg:px-32  py-4 gap-4 flex-wrap */}
 
-        <div
-          className=" w-full h-full absolute top-0 left-0 flex items-center justify-center mt-4  py-4 gap-4 flex-wrap xxl:px-32 xxl:ml-32"
-        >
+        <div className=" w-full h-full absolute top-0 left-0 flex items-center justify-center mt-4  py-4 gap-4 flex-wrap xxl:px-32 xxl:ml-32">
           {items &&
             items.map((item) => (
               <div
