@@ -3,14 +3,21 @@ import { useState, useEffect } from "react";
 import Logo from "./Images/logo_files/logo.png";
 import Avatar from "./Images/General/avatar.png";
 import { motion } from "framer-motion";
-import { Link, useNavigate, useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../firebase.config";
 import { MdShoppingCart, MdLogout, MdAdd } from "react-icons/md";
-import { useStateValue } from "../context/StateProvider";
-import { actionType } from "../context/reducer";
+
+import { useSelector, useDispatch } from "react-redux";
+import { setUser } from "../app/reducers/userSlice";
+import { setCartShow } from "../app/reducers/cartSlice";
 
 export const Header = () => {
+  const user = useSelector((state) => state.user);
+  const cartShow = useSelector((state) => state.cart.showCart);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const dispatch = useDispatch();
+
   const [isMenu, setIsMenu] = useState(false);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
@@ -18,15 +25,9 @@ export const Header = () => {
     prompt: "select_account",
   });
 
-  const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
-
   const location = useLocation();
-  const navigate = useNavigate();
   const showCart = () => {
-    dispatch({
-      type: actionType.SET_CART_SHOW,
-      cartShow: !cartShow,
-    });
+    dispatch(setCartShow(!cartShow));
   };
 
   useEffect(() => {
@@ -43,11 +44,8 @@ export const Header = () => {
   const login = async () => {
     if (!user) {
       const { user } = await signInWithPopup(firebaseAuth, provider);
-      const { refreshToken, providerData } = user;
-      dispatch({
-        type: actionType.SET_USER,
-        user: providerData[0],
-      });
+      const { providerData } = user;
+      dispatch(setUser(providerData[0]));
       localStorage.setItem("user", JSON.stringify(providerData[0]));
     } else {
       setIsMenu(!isMenu);
@@ -57,10 +55,7 @@ export const Header = () => {
   const logout = () => {
     setIsMenu(false);
     localStorage.clear();
-    dispatch({
-      type: actionType.SET_USER,
-      user: null,
-    });
+    dispatch(setUser(null));
   };
 
   return (

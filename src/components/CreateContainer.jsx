@@ -17,8 +17,9 @@ import {
 } from "firebase/storage";
 import { storage } from "../firebase.config";
 import { getAllFoodItems, saveItem } from "../utils/firebaseFunctions";
-import { useStateValue } from "../context/StateProvider";
-import { actionType } from "../context/reducer";
+
+import { useDispatch } from "react-redux";
+import { setFoodItems } from "../app/reducers/foodItemsSlice";
 
 const CreateContainer = () => {
   const [name, setName] = useState("");
@@ -29,8 +30,9 @@ const CreateContainer = () => {
   const [alertStatus, setAlertStatus] = useState("danger");
   const [msg, setMsg] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [{ foodItems }, dispatch] = useStateValue();
   const [isPopular, setIsPopular] = useState(false);
+
+  const dispatch = useDispatch();
 
   const deleteImage = () => {
     setIsLoading(true);
@@ -99,10 +101,7 @@ const CreateContainer = () => {
 
   const fetchData = async () => {
     await getAllFoodItems().then((data) => {
-      dispatch({
-        type: actionType.SET_FOOD_ITEMS,
-        foodItems: data,
-      });
+      dispatch(setFoodItems(data));
     });
   };
 
