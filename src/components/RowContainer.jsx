@@ -2,11 +2,18 @@ import React, { useRef, useEffect, useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
 import { motion } from "framer-motion";
 import notFound from "./Images/General/NotFound.svg";
-
+import { addItem, addItemQty, setCartShow } from "../reducers/cartSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { setCartItems } from "../reducers/cartSlice";
 
-const RowContainer = ({ flag, data, scrollValue }) => {
+const RowContainer = ({
+  flag,
+  data,
+  scrollValue,
+  setShowModal,
+  showModal,
+  setModalItem,
+}) => {
   const rowContainer = useRef();
   const [items, setItems] = useState([]);
 
@@ -37,6 +44,7 @@ const RowContainer = ({ flag, data, scrollValue }) => {
     >
       {data?.length > 0 ? (
         data.map((item) => {
+          console.log(item.category);
           return (
             <div
               key={item.id}
@@ -49,7 +57,18 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                   src={item.imageURL}
                 />
                 <motion.div
-                  onClick={() => setItems([...cartItems, item])}
+                  onClick={() => {
+                    dispatch(setCartShow(false));
+                    {
+                      item.category === "Entree"
+                        ? setShowModal(true)
+                        : cartItems.includes(item)
+                        ? dispatch(addItemQty(item.id))
+                        : dispatch(addItem(item));
+                    }
+
+                    setModalItem(item);
+                  }}
                   whileTap={{ scale: 0.75 }}
                   className="m-2 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md"
                 >

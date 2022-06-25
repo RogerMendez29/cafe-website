@@ -17,11 +17,13 @@ const CartContainer = () => {
       cartItems: state.cart.cartItems,
     };
   });
+
   const dispatch = useDispatch();
 
   const [flag, setFlag] = useState(1);
   const [subTot, setSubTot] = useState(0);
   const [tax, setTax] = useState(0);
+
 
   const showCart = () => {
     dispatch(setCartShow(!cartShow));
@@ -29,10 +31,10 @@ const CartContainer = () => {
 
   useEffect(() => {
     let totalPrice = cartItems.reduce(function (accumulator, item) {
-      return accumulator + item.qty * item.price;
+      return accumulator + item?.qty * item?.price;
     }, 0);
     let tax = (totalPrice * 0.07).toFixed(2);
-    setSubTot(totalPrice);
+    setSubTot((totalPrice).toFixed(2));
     setTax(tax);
   }, [subTot, flag]);
 
@@ -55,7 +57,7 @@ const CartContainer = () => {
         <p className="text-gray-700 text--lg font-semibold">Cart</p>
         <motion.p
           onClick={clearCart}
-          // whileTap={{ scale: 0.6 }}
+          whileTap={{ scale: 0.6 }}
           className="flex items-center gap-2 p-1 px-2 my-2 bg-gray-100 rounded-md hover:shadow-md  cursor-pointer text-textColor text-base"
         >
           Clear <RiRefreshFill />
@@ -84,7 +86,7 @@ const CartContainer = () => {
             <div className="w-full flex items-center justify-between">
               <p className="text-gray-200 text-xl font-semibold">Total</p>
               <p className="text-gray-200 text-xl font-semibold">
-                {parseFloat(tax) + parseFloat(subTot)}
+                {(parseFloat(tax) + parseFloat(subTot)).toFixed(2)}
               </p>
             </div>
             {user ? (

@@ -5,7 +5,7 @@ import { motion } from "framer-motion";
 import RowContainer from "./RowContainer";
 import { useSelector } from "react-redux";
 
-const MenuContainer = () => {
+const MenuContainer = ({ setShowModal, showModal,setModalItem }) => {
   const [filter, setFilter] = useState("Entree");
 
   const foodItems = useSelector((state) => state.food.foodItems);
@@ -59,6 +59,9 @@ const MenuContainer = () => {
 
         <div id="menu" className="w-full">
           <RowContainer
+            setModalItem={setModalItem}
+            setShowModal={setShowModal}
+            showModal={showModal}
             flag={false}
             data={foodItems?.filter((item) => item.category === filter)}
           />

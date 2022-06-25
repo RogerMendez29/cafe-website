@@ -3,15 +3,16 @@ import { Header } from "./components/Header";
 import CreateContainer from "./components/CreateContainer";
 import MainContainer from "./components/MainContainer";
 import AboutContainer from "./components/AboutContainer";
-
 import { Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { getAllFoodItems } from "./utils/firebaseFunctions";
-
 import { useDispatch } from "react-redux";
 import { setFoodItems } from "./reducers/foodSlice";
+// import {} from 'dotenv/config'
+// import 'babel-polyfill'
 
 export const App = () => {
+
   const dispatch = useDispatch();
 
   const fetchData = async () => {
@@ -23,6 +24,7 @@ export const App = () => {
   useEffect(() => {
     fetchData();
   }, []);
+
 
   return (
     <AnimatePresence exitBeforeEnter>

@@ -7,9 +7,12 @@ import MenuContainer from "./MenuContainer";
 import CartContainer from "./CartContainer";
 
 import { useSelector } from "react-redux";
+import ModalContainer from "./ModalContainer";
 
 const MainContainer = () => {
   const [scroll, setScroll] = useState(0);
+  const [showModal, setShowModal] = useState(false);
+  const [modalItem, setModalItem] = useState({});
 
   const { cartShow, foodItems } = useSelector((state) => {
     return {
@@ -46,6 +49,9 @@ const MainContainer = () => {
           </div>
         </div>
         <RowContainer
+          setModalItem={setModalItem}
+          setShowModal={setShowModal}
+          showModal={showModal}
           className=" "
           scrollValue={scroll}
           flag={true}
@@ -53,8 +59,15 @@ const MainContainer = () => {
         />
       </section>
 
-      <MenuContainer />
+      <MenuContainer
+        setShowModal={setShowModal}
+        showModal={showModal}
+        setModalItem={setModalItem}
+      />
       {cartShow && <CartContainer />}
+      {showModal && (
+        <ModalContainer setShowModal={setShowModal} modalItem={modalItem} />
+      )}
     </div>
   );
 };

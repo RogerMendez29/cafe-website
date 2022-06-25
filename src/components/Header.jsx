@@ -13,6 +13,7 @@ import { setUser } from "../reducers/userSlice";
 import { setCartShow } from "../reducers/cartSlice";
 
 export const Header = () => {
+
   const { user, cartShow, cartItems } = useSelector((state) => {
     return {
       user: state.user.userInfo,
