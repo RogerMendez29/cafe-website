@@ -11,7 +11,7 @@ const MainContainer = () => {
   const [{ foodItems, cartShow }, dispatch] = useStateValue();
   const [scroll, setScroll] = useState(0);
 
-  useEffect(() =>{},[scroll, cartShow])
+  useEffect(() => {}, [scroll, cartShow]);
 
   return (
     <div className="w-full h-auto flex flex-col items-center justify-center">
@@ -42,7 +42,9 @@ const MainContainer = () => {
           className=" "
           scrollValue={scroll}
           flag={true}
-          data={foodItems?.filter((foodItem) => foodItem.popular === "true")}
+          data={foodItems?.filter((foodItem) => {
+            return foodItem.popular === true;
+          })}
         />
       </section>
 

@@ -8,8 +8,8 @@ import { actionType } from "../context/reducer";
 const RowContainer = ({ flag, data, scrollValue }) => {
   const rowContainer = useRef();
   const [items, setItems] = useState([]);
-
   const [{ cartItems }, dispatch] = useStateValue();
+  let ShowModal = false;
 
   useEffect(() => {
     rowContainer.current.scrollLeft = scrollValue;
@@ -50,11 +50,14 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                   src={item.imageURL}
                 />
                 <motion.div
-                onClick={()=> setItems([...cartItems, item])}
+                  onClick={() => setItems([...cartItems, item])}
                   whileTap={{ scale: 0.75 }}
                   className="m-2 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md"
                 >
-                  <MdShoppingCart className="text-white" />
+                  <MdShoppingCart
+                    onClick={() => (ShowModal = true)}
+                    className="text-white"
+                  />
                 </motion.div>
               </div>
               <div className="w-full flex flex-col  items-end justify-end">

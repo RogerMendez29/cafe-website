@@ -69,13 +69,13 @@ export const Header = () => {
       <div className=" hidden md:flex w-full h-full items-center justify-between  p-4">
         <Link to="/" className="flex items-center gap-2">
           <motion.img
-            whileTap={{ scale: 0.6 }}
+            // whileTap={{ scale: 0.6 }}
             src={Logo}
             className=" object-cover rounded-full w-16 h-16"
             alt="logo"
           />
           <motion.p
-            whileTap={{ scale: 0.6 }}
+            // whileTap={{ scale: 0.6 }}
             className=" text-xl font-bold p-2"
           >
             {" "}
@@ -84,9 +84,9 @@ export const Header = () => {
         </Link>
         <div className=" flex items-center gap-8">
           <motion.ul
-            initial={{ opacity: 0, x: 200 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 200 }}
+            // initial={{ opacity: 0, x: 200 }}
+            // animate={{ opacity: 1, x: 0 }}
+            // exit={{ opacity: 0, x: 200 }}
             className="flex items-center gap-8 "
           >
             <Link
@@ -135,9 +135,9 @@ export const Header = () => {
             />
             {isMenu ? (
               <motion.div
-                initial={{ opacity: 0, scale: 0.6 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.6 }}
+                // initial={{ opacity: 0, scale: 0.6 }}
+                // animate={{ opacity: 1, scale: 1 }}
+                // exit={{ opacity: 0, scale: 0.6 }}
                 className="w-40 bg-grey-50  shadow-xl rounded-lg absolute flex flex-col  top-16 right-0 bg-white"
               >
                 {user && user.email === "roger61087@gmail.com" && (
@@ -177,7 +177,7 @@ export const Header = () => {
 
         <Link to="/" className="flex items-center gap-2">
           <motion.img
-            whileTap={{ scale: 0.6 }}
+            // whileTap={{ scale: 0.6 }}
             src={Logo}
             className=" object-cover rounded-full w-16 h-16"
             alt="logo"
@@ -189,12 +189,12 @@ export const Header = () => {
           <div className="relative">
             <motion.img
               onClick={login}
-              whileTap={{ scale: 0.6 }}
+              // whileTap={{ scale: 0.6 }}
               src={user ? user.photoURL : Avatar}
               className="w-14 h-14 rounded-full  shadow-xl cursor-pointer"
               alt="avatar"
             />
-            {isMenu && (
+            {/* {isMenu && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.6 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -245,7 +245,7 @@ export const Header = () => {
                   Logout <MdLogout />
                 </p>
               </motion.div>
-            )}
+            )} */}
           </div>
         </div>
       </div>

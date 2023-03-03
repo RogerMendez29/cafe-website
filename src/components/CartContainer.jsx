@@ -14,7 +14,6 @@ const CartContainer = () => {
   const [subTot, setSubTot] = useState(0);
   const [tax, setTax] = useState(0);
 
-
   const showCart = () => {
     dispatch({
       type: actionType.SET_CART_SHOW,
@@ -26,10 +25,9 @@ const CartContainer = () => {
     let totalPrice = cartItems.reduce(function (accumulator, item) {
       return accumulator + item.qty * item.price;
     }, 0);
-   let tax = (totalPrice * 0.07).toFixed(2)
-   setSubTot(totalPrice);
+    let tax = (totalPrice * 0.07).toFixed(2);
+    setSubTot(totalPrice);
     setTax(tax);
-
   }, [subTot, flag]);
 
   const clearCart = () => {
@@ -55,7 +53,7 @@ const CartContainer = () => {
         <p className="text-gray-700 text--lg font-semibold">Cart</p>
         <motion.p
           onClick={clearCart}
-          // whileTap={{ scale: 0.6 }}
+          whileTap={{ scale: 0.6 }}
           className="flex items-center gap-2 p-1 px-2 my-2 bg-gray-100 rounded-md hover:shadow-md  cursor-pointer text-textColor text-base"
         >
           Clear <RiRefreshFill />
@@ -66,7 +64,14 @@ const CartContainer = () => {
           <div className="w-full h-340 md:h-42 px-2 py-10 flex flex-col gap-3 overflow-y-scroll scrollbar-none">
             {cartItems &&
               cartItems.map((item) => {
-                return <CartItem item={item} setFlag={setFlag} flag={flag} />;
+                return (
+                  <CartItem
+                    key={item.id}
+                    item={item}
+                    setFlag={setFlag}
+                    flag={flag}
+                  />
+                );
               })}
           </div>
           <div className=" mx-2 my-2 flex-1 bg-cartTotal rounded-[2rem] flex flex-col items-center justify-evenly px-8 py-2">
@@ -83,7 +88,9 @@ const CartContainer = () => {
 
             <div className="w-full flex items-center justify-between">
               <p className="text-gray-200 text-xl font-semibold">Total</p>
-              <p className="text-gray-200 text-xl font-semibold">{parseFloat(tax) + parseFloat(subTot)}</p>
+              <p className="text-gray-200 text-xl font-semibold">
+                {parseFloat(tax) + parseFloat(subTot)}
+              </p>
             </div>
             {user ? (
               <motion.button
