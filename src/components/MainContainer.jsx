@@ -6,13 +6,14 @@ import RowContainer from "./RowContainer";
 import { useStateValue } from "../context/StateProvider";
 import MenuContainer from "./MenuContainer";
 import CartContainer from "./CartContainer";
+import { useDispatch, useSelector } from "react-redux";
 
 const MainContainer = () => {
-  const [{ foodItems, cartShow }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
+  const foodItems = useSelector((state) => state.items.foodItems);
+  const cartShow = useSelector((state) => state.cartUi.cartIsVisible);
   const [scroll, setScroll] = useState(0);
-
   useEffect(() => {}, [scroll, cartShow]);
-
   return (
     <div className="w-full h-auto flex flex-col items-center justify-center">
       <HomeContainer />
@@ -47,7 +48,6 @@ const MainContainer = () => {
           })}
         />
       </section>
-
       <MenuContainer />
       {cartShow && <CartContainer />}
     </div>

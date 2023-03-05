@@ -7,35 +7,37 @@ import CartItem from "./CartItem";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
 import EmptyCart from "./Images/General/emptyCart.svg";
+import { useDispatch, useSelector } from "react-redux";
+import itemsSlice from "../store/items/itemsSlice";
+import { cartActions } from "../store/shopping-cart/cartSlice";
+import { cartUiActions } from "../store/shopping-cart/cartUiSlice";
 
 const CartContainer = () => {
-  const [{ cartShow, cartItems, user }, dispatch] = useStateValue();
   const [flag, setFlag] = useState(1);
-  const [subTot, setSubTot] = useState(0);
-  const [tax, setTax] = useState(0);
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const cartShow = useSelector((state) => state.cartUi.cartIsVisible);
+  const user = useSelector((state) => state.user.userDetails);
+  const subTotal = useSelector((state) => state.cart.subTotal);
+  const totalTax = useSelector((state) => state.cart.totalTax);
+  const totalAmount = useSelector((state) => state.cart.totalAmount);
 
   const showCart = () => {
-    dispatch({
-      type: actionType.SET_CART_SHOW,
-      cartShow: !cartShow,
-    });
+    dispatch(cartUiActions.toggle(!cartShow));
   };
 
-  useEffect(() => {
-    let totalPrice = cartItems.reduce(function (accumulator, item) {
-      return accumulator + item.qty * item.price;
-    }, 0);
-    let tax = (totalPrice * 0.07).toFixed(2);
-    setSubTot(totalPrice);
-    setTax(tax);
-  }, [subTot, flag]);
+  // useEffect(() => {
+  //   // let totalPrice = cartItems?.reduce(function (accumulator, item) {
+  //   //   return accumulator + item.qty * item.price;
+  //   // }, 0);
+  //   let totalPrice = 9999;
+  //   let tax = (totalPrice * 0.07).toFixed(2);
+  //   setSubTot(totalPrice);
+  //   setTax(tax);
+  // }, [subTot, flag]);
 
   const clearCart = () => {
-    dispatch({
-      type: actionType.SET_CART_ITEMS,
-      cartItems: [],
-    });
-
+    dispatch(cartActions.clearCart());
     localStorage.setItem("cartItems", JSON.stringify([]));
   };
 
@@ -77,11 +79,15 @@ const CartContainer = () => {
           <div className=" mx-2 my-2 flex-1 bg-cartTotal rounded-[2rem] flex flex-col items-center justify-evenly px-8 py-2">
             <div className="w-full flex items-center justify-between">
               <p className="text-gray-400 text-lg">Sub Total</p>
-              <p className="text-gray-400 text-lg">${subTot}</p>
+              <p className="text-gray-400 text-lg">
+                ${Math.round((subTotal + Number.EPSILON) * 100) / 100}
+              </p>
             </div>
             <div className="w-full flex items-center justify-between">
               <p className="text-gray-400 text-lg">Sales tax</p>
-              <p className="text-gray-400 text-lg">$ {tax}</p>
+              <p className="text-gray-400 text-lg">
+                $ {Math.round((totalTax + Number.EPSILON) * 100) / 100}
+              </p>
             </div>
 
             <div className="w-full border-b border-gray-600 my-2"></div>
@@ -89,7 +95,7 @@ const CartContainer = () => {
             <div className="w-full flex items-center justify-between">
               <p className="text-gray-200 text-xl font-semibold">Total</p>
               <p className="text-gray-200 text-xl font-semibold">
-                {parseFloat(tax) + parseFloat(subTot)}
+                ${Math.round((totalAmount + Number.EPSILON) * 100) / 100}
               </p>
             </div>
             {user ? (

@@ -4,27 +4,22 @@ import { motion } from "framer-motion";
 import notFound from "./Images/General/NotFound.svg";
 import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
+import { useDispatch, useSelector } from "react-redux";
+import { cartActions } from "../store/shopping-cart/cartSlice";
 
 const RowContainer = ({ flag, data, scrollValue }) => {
   const rowContainer = useRef();
-  const [items, setItems] = useState([]);
-  const [{ cartItems }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
   let ShowModal = false;
 
   useEffect(() => {
     rowContainer.current.scrollLeft = scrollValue;
   }, [scrollValue]);
 
-  useEffect(() => {
-    addToCart();
-  }, [items]);
-
   const addToCart = (item) => {
-    dispatch({
-      type: actionType.SET_CART_ITEMS,
-      cartItems: items,
-    });
-    localStorage.setItem("cartItems", JSON.stringify(items));
+    dispatch(cartActions.addItem(item));
   };
 
   return (
@@ -50,7 +45,9 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                   src={item.imageURL}
                 />
                 <motion.div
-                  onClick={() => setItems([...cartItems, item])}
+                  onClick={() => {
+                    addToCart(item);
+                  }}
                   whileTap={{ scale: 0.75 }}
                   className="m-2 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md"
                 >

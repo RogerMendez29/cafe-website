@@ -7,10 +7,13 @@ import { Link, useNavigate, useLocation } from "react-router-dom";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import { app } from "../firebase.config";
 import { MdShoppingCart, MdLogout, MdAdd } from "react-icons/md";
-import { useStateValue } from "../context/StateProvider";
 import { actionType } from "../context/reducer";
+import { useSelector, useDispatch } from "react-redux";
+import { userActions } from "../store/user/userSlice";
+import { cartUiActions } from "../store/shopping-cart/cartUiSlice";
 
 export const Header = () => {
+  const dispatch = useDispatch();
   const [isMenu, setIsMenu] = useState(false);
   const firebaseAuth = getAuth(app);
   const provider = new GoogleAuthProvider();
@@ -18,23 +21,27 @@ export const Header = () => {
     prompt: "select_account",
   });
 
-  const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
+  // const [{ user, cartShow, cartItems }, dispatch] = useStateValue();
+  const user = useSelector((state) => state.user.userDetails);
+  const cartShow = useSelector((state) => state.cartUi.cartIsVisible);
+  const cartItems = useSelector((state) => state.cart.cartItems);
+  const foodItems = useSelector((state) => state.items.foodItems);
 
   const location = useLocation();
   const navigate = useNavigate();
+
   const showCart = () => {
-    dispatch({
-      type: actionType.SET_CART_SHOW,
-      cartShow: !cartShow,
-    });
+    dispatch(cartUiActions.toggle(!cartShow));
+    console.log(cartShow);
   };
+
+  useEffect(() => {}, []);
 
   useEffect(() => {
     if (location.hash) {
       let elem = document.getElementById(location.hash.slice(1));
 
       elem.scrollIntoView({ behavior: "smooth", block: "center" });
-      console.log(elem);
     } else {
       window.scrollTo({ top: 0, left: 0, behavior: "smooth" });
     }
@@ -44,10 +51,7 @@ export const Header = () => {
     if (!user) {
       const { user } = await signInWithPopup(firebaseAuth, provider);
       const { refreshToken, providerData } = user;
-      dispatch({
-        type: actionType.SET_USER,
-        user: providerData[0],
-      });
+      dispatch(userActions.setUser(providerData[0]));
       localStorage.setItem("user", JSON.stringify(providerData[0]));
     } else {
       setIsMenu(!isMenu);
@@ -57,10 +61,7 @@ export const Header = () => {
   const logout = () => {
     setIsMenu(false);
     localStorage.clear();
-    dispatch({
-      type: actionType.SET_USER,
-      user: null,
-    });
+    dispatch(userActions.setUser());
   };
 
   return (
@@ -69,13 +70,13 @@ export const Header = () => {
       <div className=" hidden md:flex w-full h-full items-center justify-between  p-4">
         <Link to="/" className="flex items-center gap-2">
           <motion.img
-            // whileTap={{ scale: 0.6 }}
+            whileTap={{ scale: 0.6 }}
             src={Logo}
             className=" object-cover rounded-full w-16 h-16"
             alt="logo"
           />
           <motion.p
-            // whileTap={{ scale: 0.6 }}
+            whileTap={{ scale: 0.6 }}
             className=" text-xl font-bold p-2"
           >
             {" "}
@@ -84,9 +85,9 @@ export const Header = () => {
         </Link>
         <div className=" flex items-center gap-8">
           <motion.ul
-            // initial={{ opacity: 0, x: 200 }}
-            // animate={{ opacity: 1, x: 0 }}
-            // exit={{ opacity: 0, x: 200 }}
+            initial={{ opacity: 0, x: 200 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: 200 }}
             className="flex items-center gap-8 "
           >
             <Link
@@ -97,10 +98,10 @@ export const Header = () => {
             </Link>
             <Link
               to="/#menu"
-              // onClick={() => {
-              //   const menu = document.querySelector("#menu");
-              //   menu.scrollIntoView({ behavior: "smooth", block: "center" });
-              // }}
+              onClick={() => {
+                const menu = document.querySelector("#menu");
+                menu.scrollIntoView({ behavior: "smooth", block: "center" });
+              }}
               className="text-base text-textColor hover:text-headingColor duration-100 transition-all ease-in-out cursor-pointer"
             >
               <motion.div whileTap={{ scale: 0.6 }}>Menu</motion.div>
@@ -135,9 +136,9 @@ export const Header = () => {
             />
             {isMenu ? (
               <motion.div
-                // initial={{ opacity: 0, scale: 0.6 }}
-                // animate={{ opacity: 1, scale: 1 }}
-                // exit={{ opacity: 0, scale: 0.6 }}
+                initial={{ opacity: 0, scale: 0.6 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.6 }}
                 className="w-40 bg-grey-50  shadow-xl rounded-lg absolute flex flex-col  top-16 right-0 bg-white"
               >
                 {user && user.email === "roger61087@gmail.com" && (
@@ -177,7 +178,7 @@ export const Header = () => {
 
         <Link to="/" className="flex items-center gap-2">
           <motion.img
-            // whileTap={{ scale: 0.6 }}
+            whileTap={{ scale: 0.6 }}
             src={Logo}
             className=" object-cover rounded-full w-16 h-16"
             alt="logo"
@@ -189,12 +190,12 @@ export const Header = () => {
           <div className="relative">
             <motion.img
               onClick={login}
-              // whileTap={{ scale: 0.6 }}
+              whileTap={{ scale: 0.6 }}
               src={user ? user.photoURL : Avatar}
               className="w-14 h-14 rounded-full  shadow-xl cursor-pointer"
               alt="avatar"
             />
-            {/* {isMenu && (
+            {isMenu && (
               <motion.div
                 initial={{ opacity: 0, scale: 0.6 }}
                 animate={{ opacity: 1, scale: 1 }}
@@ -245,7 +246,7 @@ export const Header = () => {
                   Logout <MdLogout />
                 </p>
               </motion.div>
-            )} */}
+            )}
           </div>
         </div>
       </div>

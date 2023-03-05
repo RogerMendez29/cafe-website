@@ -3,12 +3,14 @@ import { IoFastFood } from "react-icons/io5";
 import { categories } from "../utils/staticData";
 import { motion } from "framer-motion";
 import RowContainer from "./RowContainer";
-import { useStateValue } from "../context/StateProvider";
+import { useDispatch, useSelector } from "react-redux";
+import itemsSlice from "../store/items/itemsSlice";
 
 const MenuContainer = () => {
   const [filter, setFilter] = useState("Entree");
+  const dispatch = useDispatch();
 
-  const [{ foodItems }, dispatch] = useStateValue();
+  const foodItems = useSelector((state) => state.items.foodItems);
 
   return (
     <section className="w-full my-6" id="menu">
@@ -28,7 +30,6 @@ const MenuContainer = () => {
                 } w-24 min-w-[94px] h-28 cursor-pointer rounded-lg drop-shadow-xl flex flex-col gap-3 items-center justify-center hover:bg-red-500 `}
                 onClick={() => {
                   setFilter(category.name);
-                  
                 }}
               >
                 <div
