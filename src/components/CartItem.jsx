@@ -1,56 +1,30 @@
 import React, { useEffect, useState } from "react";
 import { BiMinus, BiPlus } from "react-icons/bi";
 import { motion } from "framer-motion";
-import { useStateValue } from "../context/StateProvider";
-import { actionType } from "../context/reducer";
-let items = [];
+
+import { cartActions } from "../store/shopping-cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const CartItem = ({ item, setFlag, flag }) => {
-  const [{ cartItems }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
+  const cartItems = useSelector((state) => state.cart.cartItems);
   const [qty, setQty] = useState(item.qty);
-
-  const cartDispatch = () => {
-    localStorage.setItem("cartItems", JSON.stringify(items));
-    dispatch({
-      type: actionType.SET_CART_ITEMS,
-      cartItems: items,
-    });
-  };
-
+  let items = cartItems;
   const updateQty = (action, id) => {
-    if (action == "add") {
-      setQty(qty + 1);
-      cartItems.map((item) => {
-        if (item.id === id) {
-          item.qty += 1;
-          setFlag(flag + 1);
-        }
-      });
-      cartDispatch();
+    let item = cartItems.filter((item) => item.id === id);
+    if (action === "add") {
+      console.log(item[0]);
+      dispatch(cartActions.addItem(item[0]));
+      setQty(item[0].qty);
     } else {
-      // initial state value is one so you need to check if 1 then remove it
-      if (qty == 1) {
-        items = cartItems.filter((item) => item.id !== id);
-        setFlag(flag + 1);
-        cartDispatch();
-      } else {
-        setQty(qty - 1);
-        cartItems.map((item) => {
-          if (item.id === id) {
-            setFlag(flag + 1);
-            item.qty -= 1;
-          }
-        });
-        cartDispatch();
-      }
+      dispatch(cartActions.removeItem(id));
     }
   };
 
-  
-
   useEffect(() => {
-    items = cartItems;
-  }, [qty, items]);
+    let specificItem = cartItems.find((cartItem) => cartItem.id === item.id);
+    setQty(specificItem.qty);
+  }, [cartItems]);
 
   return (
     <div className="w-full p-1 px-2 rounded-lg bg-cartItem flex items-center gap-2">
@@ -65,7 +39,7 @@ const CartItem = ({ item, setFlag, flag }) => {
         <p className="text-base text-gray-50">{item.name}</p>
         <p className="text-sm block text-gray-300 font-semibold">
           <span className="text-xs">$</span>
-          {item.price * qty}
+          {Math.round((item.price * qty + Number.EPSILON) * 100) / 100}
         </p>
       </div>
 

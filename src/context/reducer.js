@@ -29,6 +29,11 @@ const reducer = (state, action) => {
         ...state,
         cartItems: action.cartItems,
       };
+      case actionType.INCREMENT_ITEM_QTY:
+      return {
+        ...state,
+        cartItems: action.cartItems,
+      };
 
     default:
       return state;

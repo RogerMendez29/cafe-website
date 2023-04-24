@@ -6,16 +6,27 @@ import RowContainer from "./RowContainer";
 import { useStateValue } from "../context/StateProvider";
 import MenuContainer from "./MenuContainer";
 import CartContainer from "./CartContainer";
+import { useDispatch, useSelector } from "react-redux";
+import ItemModalContainer from "./ItemModalContainer";
 
 const MainContainer = () => {
-  const [{ foodItems, cartShow }, dispatch] = useStateValue();
+  const dispatch = useDispatch();
+  const foodItems = useSelector((state) => state.items.foodItems);
+  const cartShow = useSelector((state) => state.cartUi.cartIsVisible);
   const [scroll, setScroll] = useState(0);
-
-  useEffect(() =>{},[scroll, cartShow])
-
+  const [open, setOpen] = useState(false);
+  const [itemBeingAdded, setItemBeingAdded] = useState(false);
+  useEffect(() => {}, [scroll, cartShow]);
   return (
     <div className="w-full h-auto flex flex-col items-center justify-center">
       <HomeContainer />
+      {open ? <ItemModalContainer open={open} setOpen={setOpen} /> : null}
+      <ItemModalContainer
+        open={open}
+        setOpen={setOpen}
+        setItemBeingAdded={setItemBeingAdded}
+        itemBeingAdded={itemBeingAdded}
+      />
       <section className="w-full p-4 ">
         <div className="w-full flex items-center justify-between">
           <p className="text-2xl font-semibold capitalize text-headingColor relative before:absolute before:rounded-lg before:content before:w-32 before:h-1 before:-bottom-2 before:left-0 before:bg-gradient-to-tr from-orange-400 to-orange-600 transition-all ease-in-out duration-100">
@@ -40,13 +51,16 @@ const MainContainer = () => {
         </div>
         <RowContainer
           className=" "
+          setItemBeingAdded={setItemBeingAdded}
+          setOpen={setOpen}
           scrollValue={scroll}
           flag={true}
-          data={foodItems?.filter((foodItem) => foodItem.popular === "true")}
+          data={foodItems?.filter((foodItem) => {
+            return foodItem.popular === true;
+          })}
         />
       </section>
-
-      <MenuContainer />
+      <MenuContainer setOpen={setOpen} setItemBeingAdded={setItemBeingAdded} />
       {cartShow && <CartContainer />}
     </div>
   );

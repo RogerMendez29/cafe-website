@@ -2,29 +2,30 @@ import React, { useRef, useEffect, useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
 import { motion } from "framer-motion";
 import notFound from "./Images/General/NotFound.svg";
-import { useStateValue } from "../context/StateProvider";
-import { actionType } from "../context/reducer";
+import { useDispatch, useSelector } from "react-redux";
 
-const RowContainer = ({ flag, data, scrollValue }) => {
+const RowContainer = ({
+  flag,
+  data,
+  scrollValue,
+  setOpen,
+  setItemBeingAdded,
+}) => {
   const rowContainer = useRef();
-  const [items, setItems] = useState([]);
+  const dispatch = useDispatch();
 
-  const [{ cartItems }, dispatch] = useStateValue();
+  const cartItems = useSelector((state) => state.cart.cartItems);
+
+  let ShowModal = false;
 
   useEffect(() => {
     rowContainer.current.scrollLeft = scrollValue;
   }, [scrollValue]);
 
-  useEffect(() => {
-    addToCart();
-  }, [items]);
-
-  const addToCart = (item) => {
-    dispatch({
-      type: actionType.SET_CART_ITEMS,
-      cartItems: items,
-    });
-    localStorage.setItem("cartItems", JSON.stringify(items));
+  const openModel = (item) => {
+    // dispatch(cartActions.addItem(item));
+    setOpen(true);
+    setItemBeingAdded(item);
   };
 
   return (
@@ -50,11 +51,16 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                   src={item.imageURL}
                 />
                 <motion.div
-                onClick={()=> setItems([...cartItems, item])}
+                  onClick={() => {
+                    openModel(item);
+                  }}
                   whileTap={{ scale: 0.75 }}
                   className="m-2 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md"
                 >
-                  <MdShoppingCart className="text-white" />
+                  <MdShoppingCart
+                    onClick={() => (ShowModal = true)}
+                    className="text-white"
+                  />
                 </motion.div>
               </div>
               <div className="w-full flex flex-col  items-end justify-end">

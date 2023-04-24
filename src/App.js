@@ -3,27 +3,25 @@ import { Header } from "./components/Header";
 import CreateContainer from "./components/CreateContainer";
 import MainContainer from "./components/MainContainer";
 import AboutContainer from "./components/AboutContainer";
-
+import { useSelector, useDispatch } from "react-redux";
 import { Route, Routes } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
-import { useStateValue } from "./context/StateProvider";
 import { getAllFoodItems } from "./utils/firebaseFunctions";
-import { actionType } from "./context/reducer";
+import { userActions } from "./store/user/userSlice";
+import { itemsActions } from "./store/items/itemsSlice";
+import { fetchUser } from "./utils/fetchLocalData";
 
 export const App = () => {
-  const [{foodItems}, dispatch] = useStateValue();
+  const dispatch = useDispatch();
 
-  const fetchData = async () => {
-    await getAllFoodItems().then((data) => {
-      dispatch({
-        type: actionType.SET_FOOD_ITEMS,
-        foodItems: data,
-      });
+  const retrieveData = () => {
+    getAllFoodItems().then((data) => {
+      dispatch(itemsActions.retrieveAllFoodItems(data));
     });
   };
 
   useEffect(() => {
-    fetchData();
+    retrieveData();
   }, []);
 
   return (

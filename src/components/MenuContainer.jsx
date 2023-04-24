@@ -3,13 +3,14 @@ import { IoFastFood } from "react-icons/io5";
 import { categories } from "../utils/staticData";
 import { motion } from "framer-motion";
 import RowContainer from "./RowContainer";
-import { useStateValue } from "../context/StateProvider";
+import { useDispatch, useSelector } from "react-redux";
+import itemsSlice from "../store/items/itemsSlice";
 
-const MenuContainer = () => {
+const MenuContainer = ({ setOpen, setItemBeingAdded }) => {
   const [filter, setFilter] = useState("Entree");
+  const dispatch = useDispatch();
 
-
-  const [{ foodItems }, dispatch] = useStateValue();
+  const foodItems = useSelector((state) => state.items.foodItems);
 
   return (
     <section className="w-full my-6" id="menu">
@@ -29,21 +30,16 @@ const MenuContainer = () => {
                 } w-24 min-w-[94px] h-28 cursor-pointer rounded-lg drop-shadow-xl flex flex-col gap-3 items-center justify-center hover:bg-red-500 `}
                 onClick={() => {
                   setFilter(category.name);
-                  console.log(category.name)
                 }}
               >
                 <div
                   className={`w-10 h-10 rounded-full shadow-lg ${
-                    filter === category.name
-                      ? "bg-white"
-                      : ""
+                    filter === category.name ? "bg-white" : ""
                   } group-hover:bg-white  flex items-center justify-center`}
                 >
                   <IoFastFood
                     className={`${
-                      filter === category.name
-                        ? "text-black"
-                        : "text-black"
+                      filter === category.name ? "text-black" : "text-black"
                     } group-hover:text-black text-lg`}
                   />
                 </div>
@@ -54,7 +50,9 @@ const MenuContainer = () => {
                       : "text-gray-500"
                   } group-hover:text-gray-800 font-bold`}
                 >
-                  {category.name === "Sandwich"? `${category.name}es`:`${category.name}s`}
+                  {category.name === "Sandwich"
+                    ? `${category.name}es`
+                    : `${category.name}s`}
                 </p>
               </motion.div>
             ))}
@@ -62,6 +60,8 @@ const MenuContainer = () => {
 
         <div id="menu" className="w-full">
           <RowContainer
+            setItemBeingAdded={setItemBeingAdded}
+            setOpen={setOpen}
             flag={false}
             data={foodItems?.filter((item) => item.category === filter)}
           />
