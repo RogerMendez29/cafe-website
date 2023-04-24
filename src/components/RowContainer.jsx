@@ -2,14 +2,18 @@ import React, { useRef, useEffect, useState } from "react";
 import { MdShoppingCart } from "react-icons/md";
 import { motion } from "framer-motion";
 import notFound from "./Images/General/NotFound.svg";
-import { useStateValue } from "../context/StateProvider";
-import { actionType } from "../context/reducer";
 import { useDispatch, useSelector } from "react-redux";
-import { cartActions } from "../store/shopping-cart/cartSlice";
 
-const RowContainer = ({ flag, data, scrollValue }) => {
+const RowContainer = ({
+  flag,
+  data,
+  scrollValue,
+  setOpen,
+  setItemBeingAdded,
+}) => {
   const rowContainer = useRef();
   const dispatch = useDispatch();
+
   const cartItems = useSelector((state) => state.cart.cartItems);
 
   let ShowModal = false;
@@ -18,8 +22,10 @@ const RowContainer = ({ flag, data, scrollValue }) => {
     rowContainer.current.scrollLeft = scrollValue;
   }, [scrollValue]);
 
-  const addToCart = (item) => {
-    dispatch(cartActions.addItem(item));
+  const openModel = (item) => {
+    // dispatch(cartActions.addItem(item));
+    setOpen(true);
+    setItemBeingAdded(item);
   };
 
   return (
@@ -46,7 +52,7 @@ const RowContainer = ({ flag, data, scrollValue }) => {
                 />
                 <motion.div
                   onClick={() => {
-                    addToCart(item);
+                    openModel(item);
                   }}
                   whileTap={{ scale: 0.75 }}
                   className="m-2 w-8 h-8 rounded-full bg-red-600 flex items-center justify-center cursor-pointer hover:shadow-md"

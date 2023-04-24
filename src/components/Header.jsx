@@ -32,10 +32,11 @@ export const Header = () => {
 
   const showCart = () => {
     dispatch(cartUiActions.toggle(!cartShow));
-    console.log(cartShow);
   };
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    // console.log(user.photoURL);
+  }, []);
 
   useEffect(() => {
     if (location.hash) {

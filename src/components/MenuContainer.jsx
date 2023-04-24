@@ -6,7 +6,7 @@ import RowContainer from "./RowContainer";
 import { useDispatch, useSelector } from "react-redux";
 import itemsSlice from "../store/items/itemsSlice";
 
-const MenuContainer = () => {
+const MenuContainer = ({ setOpen, setItemBeingAdded }) => {
   const [filter, setFilter] = useState("Entree");
   const dispatch = useDispatch();
 
@@ -60,6 +60,8 @@ const MenuContainer = () => {
 
         <div id="menu" className="w-full">
           <RowContainer
+            setItemBeingAdded={setItemBeingAdded}
+            setOpen={setOpen}
             flag={false}
             data={foodItems?.filter((item) => item.category === filter)}
           />
